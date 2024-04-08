@@ -15,12 +15,12 @@ public class ControlFrame extends JFrame implements KeyListener, Runnable {
 	private Map<Integer, Direction> directions;
 	
 	public ControlFrame() {
-		directions = new HashMap<Integer, Direction>();
-		
-		directions.put(KeyEvent.VK_UP, Direction.UP);
-		directions.put(KeyEvent.VK_DOWN, Direction.DOWN);
-		directions.put(KeyEvent.VK_RIGHT, Direction.RIGHT);
-		directions.put(KeyEvent.VK_LEFT, Direction.LEFT);
+			directions = new HashMap<Integer, Direction>();
+			
+			directions.put(KeyEvent.VK_UP, Direction.UP);
+			directions.put(KeyEvent.VK_DOWN, Direction.DOWN);
+			directions.put(KeyEvent.VK_RIGHT, Direction.RIGHT);
+			directions.put(KeyEvent.VK_LEFT, Direction.LEFT);
 		
         setSize(100, 100);
 		addKeyListener(this);

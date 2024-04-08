@@ -1,5 +1,7 @@
 package br.com.magna.snake_game.enums;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import br.com.magna.snake_game.entities.Snake;
 import br.com.magna.snake_game.entities.Table;
 
@@ -10,13 +12,22 @@ public enum Direction {
 			Snake snake = Table.getSnake();
 			int snakeRow = snake.getRow();
 			int snakeColumn = snake.getColumn();
+			int snakeSize = snake.getSnakeSize();
 			
 			if (snakeRow <= 0 || Table.table[snakeRow - 1][snakeColumn] == '#') {
 				System.exit(0);
 			}
+			
+			if(snake.getSnakeSize() == 3) {
+				Table.table[snakeRow - 1][snakeColumn] = '#';
+				Table.table[snakeRow + snakeSize][snakeColumn] = ' ';
+				snake.setRow(--snakeRow);
+				Thread.sleep(LEFT_RIGHT_TIME);
+				return;
+			}
+			
 			Table.table[snakeRow - 1][snakeColumn] = '#';
-			Table.table[snakeRow][snakeColumn] = ' ';
-			snake.setRow(--snakeRow);
+			
 			
 			Thread.sleep(UP_DOWN_TIME);
 		}
@@ -28,12 +39,22 @@ public enum Direction {
 			Snake snake = Table.getSnake();
 			int snakeRow = snake.getRow();
 			int snakeColumn = snake.getColumn();
+			int snakeSize = snake.getSnakeSize();
 			
 			if (snakeRow + 1 >= Table.table[snakeRow].length || Table.table[snakeRow + 1][snakeColumn] == '#') {
 				System.exit(0);
 			}
+
+			if(snake.getSnakeSize() == 3) {
+				Table.table[snakeRow + 1][snakeColumn] = '#';
+				Table.table[snakeRow - snakeSize][snakeColumn] = ' ';
+				snake.setRow(++snakeRow);
+				Thread.sleep(LEFT_RIGHT_TIME);
+				return;
+			}
+			
+			snake.setSnakeSize(snakeSize + 1);
 			Table.table[snakeRow + 1][snakeColumn] = '#';
-			Table.table[snakeRow][snakeColumn] = ' ';
 			snake.setRow(++snakeRow);
 			
 			Thread.sleep(UP_DOWN_TIME);
@@ -45,12 +66,22 @@ public enum Direction {
 			Snake snake = Table.getSnake();
 			int snakeRow = snake.getRow();
 			int snakeColumn = snake.getColumn();
+			int snakeSize = snake.getSnakeSize();
 			
 			if (snakeColumn <= 0 || Table.table[snakeRow][snakeColumn - 1] == '#') {
 				System.exit(0);
 			}
+			
+			if(snake.getSnakeSize() == 3) {
+				Table.table[snakeRow][snakeColumn - 1] = '#';
+				Table.table[snakeRow][snakeColumn + snakeSize] = ' ';
+				snake.setColumn(++snakeColumn);
+				Thread.sleep(LEFT_RIGHT_TIME);
+				return;
+			}
+			
+			snake.setSnakeSize(snakeSize + 1);
 			Table.table[snakeRow][snakeColumn - 1] = '#';
-			Table.table[snakeRow][snakeColumn] = ' ';
 			snake.setColumn(--snakeColumn);
 			
 			Thread.sleep(LEFT_RIGHT_TIME);
@@ -62,12 +93,22 @@ public enum Direction {
 			Snake snake = Table.getSnake();
 			int snakeRow = snake.getRow();
 			int snakeColumn = snake.getColumn();
+			int snakeSize = snake.getSnakeSize();
 			
-			if (snakeColumn >= Table.table[snakeRow].length || Table.table[snakeRow][snakeColumn+ 1] == '#') {
+			if (snakeColumn >= Table.table[snakeRow].length || Table.table[snakeRow][snakeColumn + 1] == '#') {
 				System.exit(0);
 			}
+			
+			if(snake.getSnakeSize() == 3) {
+				Table.table[snakeRow][snakeColumn + 1] = '#';
+				Table.table[snakeRow][snakeColumn - snakeSize] = ' ';
+				snake.setColumn(++snakeColumn);
+				Thread.sleep(LEFT_RIGHT_TIME);
+				return;
+			}
+			
+			snake.setSnakeSize(snakeSize + 1);
 			Table.table[snakeRow][snakeColumn + 1] = '#';
-			Table.table[snakeRow][snakeColumn] = ' ';
 			snake.setColumn(++snakeColumn);
 			
 			Thread.sleep(LEFT_RIGHT_TIME);
@@ -75,7 +116,7 @@ public enum Direction {
 	};
 	
 	private static final int UP_DOWN_TIME = 100;
-	private static final int LEFT_RIGHT_TIME = 150;
+	private static final int LEFT_RIGHT_TIME = 100;
 	
 	public abstract void move() throws InterruptedException;
 }
