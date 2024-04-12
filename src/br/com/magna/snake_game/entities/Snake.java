@@ -1,52 +1,56 @@
 package br.com.magna.snake_game.entities;
 
-import br.com.magna.snake_game.enums.Direction;
-
 public class Snake {
-	private int row = 3;
-	private int column = 3;
-	private int snakeSize = 1;
-	private int head = column;
-	private int tail = column;
-	private Direction direction;
-	
-	public void move() {
-		try {
-			direction.move();
-		} catch (InterruptedException e) {}
+	private int headRow = 3;
+	private int headColumn = 6;
+	private int tailRow = 3;
+	private int tailColumn = 3;
+	private int snakeSize = 3;
+
+	public Snake() {
 	}
 	
-	public int getHead() {
-		return head;
+	public void updateSnakeHead(int headRow, int headColumn) {
+		this.headRow = headRow;
+		this.headColumn = headColumn;
+		
+	}
+
+	public void updateSnakeTail(int tailRow, int tailColumn) {
+		this.tailRow = tailRow;
+		this.tailColumn = tailColumn;
+		
 	}
 	
-	public int getTail() {
-		return tail;
+	public void updateSnakeBody(int headRow, int headColumn, int tailRow, int tailColumn) {
+		this.headRow = headRow;
+		this.headColumn = headColumn;
+		this.tailRow = tailRow;
+		this.tailColumn = tailColumn;
+		
+		System.out.println("head row: " + headRow + " column: " + headColumn);
+		System.out.println("tail row: " + tailRow + " column: " + tailColumn);
 	}
 	
-	public int getRow() {
-		return row;
-	}
-	public void setRow(int row) {
-		this.row = row;
-	}
-	public int getColumn() {
-		return column;
-	}
-	public void setColumn(int column) {
-		this.column = column;
-	}
-	public Direction getSnakeDirection() {
-		return direction;
-	}
-	public void setSnakeDirection(Direction direction) {
-		this.direction = direction;
-	}
 	public int getSnakeSize() {
 		return snakeSize;
 	}
 	
-	public void setSnakeSize(int newSize) {
-		snakeSize = newSize;
+	public int getHeadRow() {
+		return headRow;
 	}
+	
+	public int getHeadColumn() {
+		return headColumn;
+	}
+	
+	public int getTailRow() {
+		return tailRow;
+	}
+	
+	public int getTailColumn() {
+		return tailColumn;
+	}
+
+
 }
