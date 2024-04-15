@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import br.com.magna.snake_game.services.TerminalHandler;
+
 public class Table {
 
 	public char[][] matrix = new char[35][160];
 	public Snake snake = new Snake();
 
 	public Table() {
-		loadTable();
+		loadMatrix(TerminalHandler.MAIN_MENU);
 	}
 	
 	public char[][] getMatrix() {
@@ -30,11 +32,11 @@ public class Table {
 		}
 
 	}
-
-	private void loadTable() {
+	
+	public void loadMatrix(String path) {
 		char[][] table = new char[35][160];
 		int i = 0;
-		try (Scanner s = new Scanner(new File("util/name.txt"))) {
+		try (Scanner s = new Scanner(new File(path))) {
 			while (s.hasNextLine()) {
 				String line = s.nextLine();
 

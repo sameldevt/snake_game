@@ -5,7 +5,9 @@ public class Snake {
 	private int headColumn = 3;
 	private int tailRow = 3;
 	private int tailColumn = 3;
-	private int snakeSize = 1;
+	private int newSnakeSize = 5;
+	private int oldSnakeSize = 1;
+	private int points = 0;
 
 	public Snake() {
 	}
@@ -13,11 +15,6 @@ public class Snake {
 	public void updateSnakeHead(int headRow, int headColumn) {
 		this.headRow = headRow;
 		this.headColumn = headColumn;
-		
-		System.out.println("size="+snakeSize);
-		System.out.println("head="+headRow+":"+headColumn);
-		System.out.println("tail="+tailRow+":"+tailColumn);
-		
 	}
 
 	public void updateSnakeTail(int tailRow, int tailColumn) {
@@ -25,12 +22,28 @@ public class Snake {
 		this.tailColumn = tailColumn;		
 	}
 	
-	public void setSnakeSize(int newSnakeSize) {
-		snakeSize = newSnakeSize;
+	public int getPoints() {
+		return points;
 	}
 	
-	public int getSnakeSize() {
-		return snakeSize;
+	public void setPoints(int newPointCount) {
+		points = newPointCount;
+	}
+	
+	public void setNewSnakeSize(int newSnakeSize) {
+		this.newSnakeSize = newSnakeSize;
+	}
+	
+	public int getNewSnakeSize() {
+		return newSnakeSize;
+	}
+	
+	public void setOldSnakeSize(int oldSnakeSize) {
+		this.oldSnakeSize = oldSnakeSize;
+	}
+	
+	public int getOldSnakeSize() {
+		return oldSnakeSize;
 	}
 	
 	public int getHeadRow() {
