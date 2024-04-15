@@ -2,10 +2,10 @@ package br.com.magna.snake_game.entities;
 
 public class Snake {
 	private int headRow = 3;
-	private int headColumn = 6;
+	private int headColumn = 3;
 	private int tailRow = 3;
 	private int tailColumn = 3;
-	private int snakeSize = 3;
+	private int snakeSize = 1;
 
 	public Snake() {
 	}
@@ -14,22 +14,19 @@ public class Snake {
 		this.headRow = headRow;
 		this.headColumn = headColumn;
 		
+		System.out.println("size="+snakeSize);
+		System.out.println("head="+headRow+":"+headColumn);
+		System.out.println("tail="+tailRow+":"+tailColumn);
+		
 	}
 
 	public void updateSnakeTail(int tailRow, int tailColumn) {
 		this.tailRow = tailRow;
-		this.tailColumn = tailColumn;
-		
+		this.tailColumn = tailColumn;		
 	}
 	
-	public void updateSnakeBody(int headRow, int headColumn, int tailRow, int tailColumn) {
-		this.headRow = headRow;
-		this.headColumn = headColumn;
-		this.tailRow = tailRow;
-		this.tailColumn = tailColumn;
-		
-		System.out.println("head row: " + headRow + " column: " + headColumn);
-		System.out.println("tail row: " + tailRow + " column: " + tailColumn);
+	public void setSnakeSize(int newSnakeSize) {
+		snakeSize = newSnakeSize;
 	}
 	
 	public int getSnakeSize() {

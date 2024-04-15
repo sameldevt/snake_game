@@ -71,11 +71,42 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		if (headColumn >= matrix[headRow].length || matrix[headRow][headColumn + 1] == '#') {
 			System.exit(0);
 		}
+			
+		if(matrix[headRow][headColumn + 1] == '@') {
+			System.exit(0);
+		}
 		
-		matrix[headRow][headColumn + 1] = '#';
-		matrix[headRow][headColumn] = ' ';
- 		snake.updateSnakeHead(headRow, headColumn + 1);
-		snake.updateSnakeTail(headRow, headColumn);
+		if (snakeSize < 20) {
+			matrix[headRow][headColumn + 1] = '@';
+			snake.setSnakeSize(snakeSize + 1);
+			snake.updateSnakeHead(headRow, headColumn + 1);
+			return;
+		}
+
+		matrix[headRow][headColumn + 1] = '@';
+		snake.updateSnakeHead(headRow, headColumn + 1);
+
+		if (matrix[tailRow + 1][tailColumn] == '@') {
+			matrix[tailRow + 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow + 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow - 1][tailColumn] == '@') {
+			matrix[tailRow - 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow - 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow][tailColumn + 1] == '@') {
+			matrix[tailRow][tailColumn + 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn + 1);
+			return;
+		}
+		if (matrix[tailRow][tailColumn - 1] == '@') {
+			matrix[tailRow][tailColumn - 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn - 1);
+			return;
+		}
+
 	}
 
 	public void moveLeft(Table table) {
@@ -91,10 +122,41 @@ public class Control extends JFrame implements KeyListener, Runnable {
 			System.exit(0);
 		}
 		
-		matrix[headRow][headColumn - 1] = '#';
-		matrix[headRow][headColumn] = ' ';
- 		snake.updateSnakeHead(headRow, headColumn - 1);
-		snake.updateSnakeTail(headRow, headColumn);
+		if(matrix[headRow][headColumn - 1] == '@') {
+			System.exit(0);
+		}
+
+		if (snakeSize < 20) {
+			matrix[headRow][headColumn - 1] = '@';
+			snake.setSnakeSize(snakeSize + 1);
+			snake.updateSnakeHead(headRow, headColumn - 1);
+			return;
+		}
+
+		matrix[headRow][headColumn - 1] = '@';
+		snake.updateSnakeHead(headRow, headColumn - 1);
+
+		if (matrix[tailRow + 1][tailColumn] == '@') {
+			matrix[tailRow + 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow + 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow - 1][tailColumn] == '@') {
+			matrix[tailRow - 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow - 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow][tailColumn + 1] == '@') {
+			matrix[tailRow][tailColumn + 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn + 1);
+			return;
+		}
+		if (matrix[tailRow][tailColumn - 1] == '@') {
+			matrix[tailRow][tailColumn - 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn - 1);
+			return;
+		}
+
 	}
 
 	public void moveUp(Table table) {
@@ -105,15 +167,46 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		int tailRow = snake.getTailRow();
 		int tailColumn = snake.getTailColumn();
 		int snakeSize = snake.getSnakeSize();
-		
+
 		if (headRow <= 0 || matrix[headRow - 1][headColumn] == '#') {
 			System.exit(0);
 		}
+		
+		if(matrix[headRow - 1][headColumn] == '@') {
+			System.exit(0);
+		}
 
-		matrix[headRow - 1][headColumn] = '#';
-		matrix[headRow][headColumn] = ' ';
- 		snake.updateSnakeHead(headRow - 1, headColumn);
-		snake.updateSnakeTail(headRow, headColumn);
+		if (snakeSize < 20) {
+			matrix[headRow - 1][headColumn] = '@';
+			snake.setSnakeSize(snakeSize + 1);
+			snake.updateSnakeHead(headRow - 1, headColumn);
+			return;
+		}
+
+		matrix[headRow - 1][headColumn] = '@';
+		snake.updateSnakeHead(headRow - 1, headColumn);
+
+		if (matrix[tailRow + 1][tailColumn] == '@') {
+			matrix[tailRow + 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow + 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow - 1][tailColumn] == '@') {
+			matrix[tailRow - 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow - 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow][tailColumn + 1] == '@') {
+			matrix[tailRow][tailColumn + 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn + 1);
+			return;
+		}
+		if (matrix[tailRow][tailColumn - 1] == '@') {
+			matrix[tailRow][tailColumn - 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn - 1);
+			return;
+		}
+
 	}
 
 	public void moveDown(Table table) {
@@ -128,11 +221,42 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		if (headRow + 1 >= matrix[headRow].length || matrix[headRow + 1][headColumn] == '#') {
 			System.exit(0);
 		}
+		
+		if(matrix[headRow + 1][headColumn] == '@') {
+			System.exit(0);
+		}
 
-		matrix[headRow + 1][headColumn] = '#';
-		matrix[headRow][headColumn] = ' ';
- 		snake.updateSnakeHead(headRow + 1, headColumn);
-		snake.updateSnakeTail(headRow, headColumn);
+		if (snakeSize < 20) {
+			matrix[headRow + 1][headColumn] = '@';
+			snake.setSnakeSize(snakeSize + 1);
+			snake.updateSnakeHead(headRow + 1, headColumn);
+			return;
+		}
+
+		matrix[headRow + 1][headColumn] = '@';
+		snake.updateSnakeHead(headRow + 1, headColumn);
+
+		if (matrix[tailRow + 1][tailColumn] == '@') {
+			matrix[tailRow + 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow + 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow - 1][tailColumn] == '@') {
+			matrix[tailRow - 1][tailColumn] = ' ';
+			snake.updateSnakeTail(tailRow - 1, tailColumn);
+			return;
+		}
+		if (matrix[tailRow][tailColumn + 1] == '@') {
+			matrix[tailRow][tailColumn + 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn + 1);
+			return;
+		}
+		if (matrix[tailRow][tailColumn - 1] == '@') {
+			matrix[tailRow][tailColumn - 1] = ' ';
+			snake.updateSnakeTail(tailRow, tailColumn - 1);
+			return;
+		}
+
 	}
 
 	@Override
