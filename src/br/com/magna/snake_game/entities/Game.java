@@ -12,6 +12,8 @@ public class Game implements Runnable {
 
 	private boolean isGameWon = false;
 	private Table table = new Table();
+	private int pointsToWin = 0;
+	private int points = 0;
 	private Method action = null;
 
 	private Game() {
@@ -26,9 +28,9 @@ public class Game implements Runnable {
 
 		return instance;
 	}
-	
+
 	public void setAction(Method action) {
-		if(action == null) {
+		if (action == null) {
 			return;
 		}
 		this.action = action;
@@ -37,6 +39,7 @@ public class Game implements Runnable {
 	@Override
 	public void run() {
 		if (!menuLoop()) {
+			update();
 			gameLoop();
 		}
 	}
@@ -48,8 +51,8 @@ public class Game implements Runnable {
 				try {
 					if (action != null) {
 						action.invoke(new Control(), table);
-						
-						if (action.equals(Control.class.getDeclaredMethod("moveRight", Table.class))) {
+
+						if (action.getName().equals("moveRight")) {
 							isOptionPicked = true;
 							break;
 						}
@@ -58,44 +61,154 @@ public class Game implements Runnable {
 					table.printMatrix();
 					instance.wait();
 					TerminalHandler.clear();
-				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException reflectionException) {
+				} catch (IllegalAccessException | InvocationTargetException reflectionException) {
 					LogHandler.error("Error accessing method from Control:" + reflectionException.getMessage());
-				} catch(InterruptedException threadException) {
+				} catch (InterruptedException threadException) {
 					LogHandler.error("Error handling thread: " + threadException.getMessage());
 				} catch (NullPointerException actionIsNullException) {
 				}
 			}
-			
+
 			return false;
 		}
 	}
 
-	private void gameLoop() {
+	private void update() {
 		table.loadMatrix(TerminalHandler.NAME);
-		
-		while (!isGameWon) {
-			try {
-				action.invoke(new Control(), table);
-				table.printMatrix();
-				wait(action);
-				TerminalHandler.clear();
-			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException reflectionException) {
-				LogHandler.error("Error accessing method from Control:" + reflectionException.getMessage());
-			} catch(InterruptedException threadException) {
-				LogHandler.error("Error handling thread: " + threadException.getMessage());
-			} catch (NullPointerException actionIsNullException) {
-				
-			}
-		}
+		table.loadRandomPoints(table.getMatrix());
+		pointsToWin = table.getTotalMapPoints();
 	}
 	
-	private void wait(Method action) throws NoSuchMethodException, SecurityException, InterruptedException {
-		if(action.equals(Control.class.getDeclaredMethod("moveUp", Table.class))
-				|| action.equals(Control.class.getDeclaredMethod("moveDown", Table.class))){
-			Thread.sleep(150);
+	private void gameLoop() {
+		while (!isGameWon) {
+			try {
+				checkWin();
+				moveSnake();
+				table.printMatrix();
+				waitThread();
+				TerminalHandler.clear();
+			} catch (NullPointerException actionIsNullException) {
+
+			}
 		}
-		else {
-			Thread.sleep(100);
+
+		TerminalHandler.print(TerminalHandler.YOU_WIN);
+		System.exit(0);
+	}
+
+	private void increasePoints() {
+		points += 1;
+		Snake snake = table.getSnake();
+		resize(snake);
+	}
+
+	private void waitThread() {
+		try {
+			switch (action.getName()) {
+			case "moveUp":
+			case "moveDown":
+				Thread.sleep(150);
+				return;
+			case "moveRight":
+			case "moveLeft":
+				Thread.sleep(100);
+				return;
+			}
+		} catch (InterruptedException threadException) {
+			LogHandler.error("Error handling thread: " + threadException.getMessage());
+		}
+	}
+
+	private boolean isCollision() {
+		return hitsWall() || hitsItself();
+	}
+
+	private boolean hitsWall() {
+		char[][] matrix = table.getMatrix();
+		Snake snake = table.getSnake();
+		char wallChar = table.getWallChar();
+		int headRow = snake.getHeadRow();
+		int headColumn = snake.getHeadColumn();
+		
+		switch (action.getName()) {
+		case "moveUp":
+			return headRow <= matrix.length - matrix.length || matrix[headRow - 1][headColumn] == wallChar;
+		case "moveDown":
+			return headRow + 1 >= matrix[headRow].length || matrix[headRow + 1][headColumn] == wallChar;
+		case "moveRight":
+			return headColumn >= matrix[headRow].length || matrix[headRow][headColumn + 1] == wallChar;
+		case "moveLeft":
+			return headColumn <= matrix.length - matrix.length  || matrix[headRow][headColumn - 1] == wallChar;
+		}
+
+		return false;
+	}
+
+	private boolean hitsItself() {
+		char[][] matrix = table.getMatrix();
+		Snake snake = table.getSnake();
+		char snakeChar = table.getSnakeChar();
+		int headRow = snake.getHeadRow();
+		int headColumn = snake.getHeadColumn();
+		
+		switch (action.getName()) {
+		case "moveUp":
+			return matrix[headRow - 1][headColumn] == snakeChar;
+		case "moveDown":
+			return matrix[headRow + 1][headColumn] == snakeChar;
+		case "moveRight":
+			return matrix[headRow][headColumn + 1] == snakeChar;
+		case "moveLeft":
+			return matrix[headRow][headColumn - 1] == snakeChar;
+		}
+
+		return false;
+	}
+
+	private void resize(Snake snake) {
+		int oldSnakeSize = snake.getOldSnakeSize();
+		snake.setNewSnakeSize(oldSnakeSize + points);
+	}
+
+	public boolean isFruitPicked() {
+		char[][] matrix = table.getMatrix();
+		Snake snake = table.getSnake();
+		char pointChar = table.getPointChar();
+		int headRow = snake.getHeadRow();
+		int headColumn = snake.getHeadColumn();
+
+		switch (action.getName()) {
+		case "moveUp":
+			return matrix[headRow - 1][headColumn] == pointChar;
+		case "moveDown":
+			return matrix[headRow + 1][headColumn] == pointChar;
+		case "moveRight":
+			return matrix[headRow][headColumn + 1] == pointChar;
+		case "moveLeft":
+			return matrix[headRow][headColumn - 1] == pointChar;
+		}
+		return false;
+	}
+
+	private void checkWin() {
+		if (points == pointsToWin) {
+			isGameWon = true;
+		}
+	}
+
+	private void moveSnake() {
+		try {
+			if (isCollision()) {
+				TerminalHandler.print(TerminalHandler.GAME_OVER);
+				System.exit(0);
+			}
+
+			if (isFruitPicked()) {
+				increasePoints();
+			}
+			action.invoke(new Control(), table);
+		} catch (IllegalAccessException | InvocationTargetException reflectionException) {
+			LogHandler.error("Error accessing method from Control:" + reflectionException.getMessage());
 		}
 	}
 }

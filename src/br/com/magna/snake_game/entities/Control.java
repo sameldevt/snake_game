@@ -99,13 +99,14 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		char[][] matrix = table.getMatrix();
 		int cursorRow = 18;
 		int cursorColumn = 64;
+		char cursorChar = '>';
 
-		if (matrix[cursorRow][cursorColumn] == '>') {
+		if (matrix[cursorRow][cursorColumn] == cursorChar) {
 			matrix[cursorRow][cursorColumn] = ' ';
-			matrix[cursorRow + 1][cursorColumn] = '>';
+			matrix[cursorRow + 1][cursorColumn] = cursorChar;
 		} else {
 			matrix[cursorRow + 1][cursorColumn] = ' ';
-			matrix[cursorRow][cursorColumn] = '>';
+			matrix[cursorRow][cursorColumn] = cursorChar;
 		}
 	}
 
@@ -113,13 +114,14 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		char[][] matrix = table.getMatrix();
 		int cursorRow = 18;
 		int cursorColumn = 64;
+		char cursorChar = '>';
 
-		if (matrix[cursorRow][cursorColumn] == '>') {
+		if (matrix[cursorRow][cursorColumn] == cursorChar) {
 			loadGameControls();
 			Method action = Control.lookup(KeyEvent.VK_RIGHT);
 			gameInstance.setAction(action);
 			isMenu = false;
-		} else if (matrix[cursorRow + 1][cursorColumn] == '>') {
+		} else if (matrix[cursorRow + 1][cursorColumn] == cursorChar) {
 			TerminalHandler.print(TerminalHandler.LATER);
 			System.exit(0);
 		}
@@ -132,44 +134,18 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		int headColumn = snake.getHeadColumn();
 		int oldSnakeSize = snake.getOldSnakeSize();
 		int newSnakeSize = snake.getNewSnakeSize();
-
-		if (headColumn >= matrix[headRow].length || matrix[headRow][headColumn + 1] == '#') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
-
-		if (matrix[headRow][headColumn + 1] == 'O') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
+		char snakeChar = snake.getSnakeChar();
 
 		if (oldSnakeSize < newSnakeSize) {
-			matrix[headRow][headColumn + 1] = 'O';
+			matrix[headRow][headColumn + 1] = snakeChar;
 			snake.setOldSnakeSize(oldSnakeSize + 1);
 			snake.updateSnakeHead(headRow, headColumn + 1);
 			return;
 		}
-
-		if (matrix[headRow][headColumn + 1] == '*') {
-			int snakePoints = snake.getPoints();
-			snake.setPoints(snakePoints + 1);
-
-			if (snake.getPoints() == 7) {
-				TerminalHandler.print(TerminalHandler.YOU_WIN);
-				System.exit(0);
-			}
-
-			snake.setNewSnakeSize(oldSnakeSize + 5);
-			matrix[headRow][headColumn + 1] = 'O';
-			snake.updateSnakeHead(headRow, headColumn + 1);
-			return;
-		}
-
-		matrix[headRow][headColumn + 1] = 'O';
+		
+		matrix[headRow][headColumn + 1] = snakeChar;
 		snake.updateSnakeHead(headRow, headColumn + 1);
-
 		checkTail(snake, matrix);
-
 	}
 
 	public void moveLeft(Table table) {
@@ -179,44 +155,18 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		int headColumn = snake.getHeadColumn();
 		int oldSnakeSize = snake.getOldSnakeSize();
 		int newSnakeSize = snake.getNewSnakeSize();
-
-		if (headColumn <= 0 || matrix[headRow][headColumn - 1] == '#') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
-
-		if (matrix[headRow][headColumn - 1] == 'O') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
+		char snakeChar = snake.getSnakeChar();
 
 		if (oldSnakeSize < newSnakeSize) {
-			matrix[headRow][headColumn - 1] = 'O';
+			matrix[headRow][headColumn - 1] = snakeChar;
 			snake.setOldSnakeSize(oldSnakeSize + 1);
 			snake.updateSnakeHead(headRow, headColumn - 1);
 			return;
 		}
 
-		if (matrix[headRow][headColumn - 1] == '*') {
-			int snakePoints = snake.getPoints();
-			snake.setPoints(snakePoints + 1);
-
-			if (snake.getPoints() == 7) {
-				TerminalHandler.print(TerminalHandler.YOU_WIN);
-				System.exit(0);
-			}
-
-			snake.setNewSnakeSize(oldSnakeSize + 5);
-			matrix[headRow][headColumn - 1] = 'O';
-			snake.updateSnakeHead(headRow, headColumn - 1);
-			return;
-		}
-
-		matrix[headRow][headColumn - 1] = 'O';
+		matrix[headRow][headColumn - 1] = snakeChar;
 		snake.updateSnakeHead(headRow, headColumn - 1);
-
 		checkTail(snake, matrix);
-
 	}
 
 	public void moveUp(Table table) {
@@ -226,44 +176,18 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		int headColumn = snake.getHeadColumn();
 		int oldSnakeSize = snake.getOldSnakeSize();
 		int newSnakeSize = snake.getNewSnakeSize();
-
-		if (headRow <= 0 || matrix[headRow - 1][headColumn] == '#') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
-
-		if (matrix[headRow - 1][headColumn] == 'O') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
+		char snakeChar = snake.getSnakeChar();
 
 		if (oldSnakeSize < newSnakeSize) {
-			matrix[headRow - 1][headColumn] = 'O';
+			matrix[headRow - 1][headColumn] = snakeChar;
 			snake.setOldSnakeSize(oldSnakeSize + 1);
 			snake.updateSnakeHead(headRow - 1, headColumn);
 			return;
 		}
 
-		if (matrix[headRow - 1][headColumn] == '*') {
-			int snakePoints = snake.getPoints();
-			snake.setPoints(snakePoints + 1);
-
-			if (snake.getPoints() == 7) {
-				TerminalHandler.print(TerminalHandler.YOU_WIN);
-				System.exit(0);
-			}
-
-			snake.setNewSnakeSize(oldSnakeSize + 5);
-			matrix[headRow - 1][headColumn] = 'O';
-			snake.updateSnakeHead(headRow - 1, headColumn);
-			return;
-		}
-
-		matrix[headRow - 1][headColumn] = 'O';
+		matrix[headRow - 1][headColumn] = snakeChar;
 		snake.updateSnakeHead(headRow - 1, headColumn);
-
 		checkTail(snake, matrix);
-
 	}
 
 	public void moveDown(Table table) {
@@ -273,65 +197,41 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		int headColumn = snake.getHeadColumn();
 		int oldSnakeSize = snake.getOldSnakeSize();
 		int newSnakeSize = snake.getNewSnakeSize();
-
-		if (headRow + 1 >= matrix[headRow].length || matrix[headRow + 1][headColumn] == '#') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
-
-		if (matrix[headRow + 1][headColumn] == 'O') {
-			TerminalHandler.print(TerminalHandler.GAME_OVER);
-			System.exit(0);
-		}
-
+		char snakeChar = snake.getSnakeChar();
+		
 		if (oldSnakeSize < newSnakeSize) {
-			matrix[headRow + 1][headColumn] = 'O';
+			matrix[headRow + 1][headColumn] = snakeChar;
 			snake.setOldSnakeSize(oldSnakeSize + 1);
 			snake.updateSnakeHead(headRow + 1, headColumn);
 			return;
 		}
 
-		if (matrix[headRow + 1][headColumn] == '*') {
-			int snakePoints = snake.getPoints();
-			snake.setPoints(snakePoints + 1);
-
-			if (snake.getPoints() == 7) {
-				TerminalHandler.print(TerminalHandler.YOU_WIN);
-				System.exit(0);
-			}
-
-			snake.setNewSnakeSize(oldSnakeSize + 5);
-			matrix[headRow + 1][headColumn] = 'O';
-			snake.updateSnakeHead(headRow + 1, headColumn);
-			return;
-		}
-
-		matrix[headRow + 1][headColumn] = 'O';
+		matrix[headRow + 1][headColumn] = snakeChar;
 		snake.updateSnakeHead(headRow + 1, headColumn);
-
 		checkTail(snake, matrix);
 	}
 
 	private void checkTail(Snake snake, char[][] matrix) {
 		int tailRow = snake.getTailRow();
 		int tailColumn = snake.getTailColumn();
-
-		if (matrix[tailRow + 1][tailColumn] == 'O') {
+		char snakeChar = snake.getSnakeChar();
+		
+		if (matrix[tailRow + 1][tailColumn] == snakeChar) {
 			matrix[tailRow + 1][tailColumn] = ' ';
 			snake.updateSnakeTail(tailRow + 1, tailColumn);
 			return;
 		}
-		if (matrix[tailRow - 1][tailColumn] == 'O') {
+		if (matrix[tailRow - 1][tailColumn] == snakeChar) {
 			matrix[tailRow - 1][tailColumn] = ' ';
 			snake.updateSnakeTail(tailRow - 1, tailColumn);
 			return;
 		}
-		if (matrix[tailRow][tailColumn + 1] == 'O') {
+		if (matrix[tailRow][tailColumn + 1] == snakeChar) {
 			matrix[tailRow][tailColumn + 1] = ' ';
 			snake.updateSnakeTail(tailRow, tailColumn + 1);
 			return;
 		}
-		if (matrix[tailRow][tailColumn - 1] == 'O') {
+		if (matrix[tailRow][tailColumn - 1] == snakeChar) {
 			matrix[tailRow][tailColumn - 1] = ' ';
 			snake.updateSnakeTail(tailRow, tailColumn - 1);
 			return;

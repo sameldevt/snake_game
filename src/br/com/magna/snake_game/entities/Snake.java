@@ -7,7 +7,7 @@ public class Snake {
 	private int tailColumn = 3;
 	private int newSnakeSize = 5;
 	private int oldSnakeSize = 1;
-	private int points = 0;
+	private char snakeChar = 'o';
 
 	public Snake() {
 	}
@@ -20,14 +20,6 @@ public class Snake {
 	public void updateSnakeTail(int tailRow, int tailColumn) {
 		this.tailRow = tailRow;
 		this.tailColumn = tailColumn;		
-	}
-	
-	public int getPoints() {
-		return points;
-	}
-	
-	public void setPoints(int newPointCount) {
-		points = newPointCount;
 	}
 	
 	public void setNewSnakeSize(int newSnakeSize) {
@@ -60,6 +52,10 @@ public class Snake {
 	
 	public int getTailColumn() {
 		return tailColumn;
+	}
+
+	public char getSnakeChar() {
+		return snakeChar;
 	}
 
 
