@@ -27,8 +27,10 @@ public class Game implements Runnable {
 		return instance;
 	}
 	
-
 	public void setAction(Method action) {
+		if(action == null) {
+			return;
+		}
 		this.action = action;
 	}
 
@@ -56,17 +58,11 @@ public class Game implements Runnable {
 					table.printMatrix();
 					instance.wait();
 					TerminalHandler.clear();
-				} catch (IllegalAccessException e1) {
-					LogHandler.error("Error accessing method from Control:" + e1.getMessage());
-				} catch (InvocationTargetException e2) {
-					LogHandler.error("Error invocating method from Control:" + e2.getMessage());
-				} catch (InterruptedException e3) {
-					LogHandler.error("Error handling thread: " + e3.getMessage());
-				} catch (NullPointerException e4) {
-				} catch (NoSuchMethodException e5) {
-					LogHandler.error("Error accessing method from Control:" + e5.getMessage());
-				} catch (SecurityException e6) {
-					LogHandler.error("Error handling thread: " + e6.getMessage());
+				} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException reflectionException) {
+					LogHandler.error("Error accessing method from Control:" + reflectionException.getMessage());
+				} catch(InterruptedException threadException) {
+					LogHandler.error("Error handling thread: " + threadException.getMessage());
+				} catch (NullPointerException actionIsNullException) {
 				}
 			}
 			
@@ -81,33 +77,25 @@ public class Game implements Runnable {
 			try {
 				action.invoke(new Control(), table);
 				table.printMatrix();
-				
-				setGameSpeed(action);
-				
+				wait(action);
 				TerminalHandler.clear();
-			} catch (IllegalAccessException e1) {
-				LogHandler.error("Error accessing method from Control:" + e1.getMessage());
-			} catch (InvocationTargetException e2) {
-				LogHandler.error("Error invocating method from Control:" + e2.getMessage());
-			} catch (InterruptedException e3) {
-				LogHandler.error("Error handling thread: " + e3.getMessage());
-			} catch (NullPointerException e4) {
-
-			} catch (NoSuchMethodException e5) {
-				LogHandler.error("Error accessing method from Control:" + e5.getMessage());
-			} catch (SecurityException e6) {
-				LogHandler.error("Error accessing method from Control:" + e6.getMessage());
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException reflectionException) {
+				LogHandler.error("Error accessing method from Control:" + reflectionException.getMessage());
+			} catch(InterruptedException threadException) {
+				LogHandler.error("Error handling thread: " + threadException.getMessage());
+			} catch (NullPointerException actionIsNullException) {
+				
 			}
 		}
 	}
 	
-	private void setGameSpeed(Method action) throws NoSuchMethodException, SecurityException, InterruptedException {
+	private void wait(Method action) throws NoSuchMethodException, SecurityException, InterruptedException {
 		if(action.equals(Control.class.getDeclaredMethod("moveUp", Table.class))
 				|| action.equals(Control.class.getDeclaredMethod("moveDown", Table.class))){
-			Thread.sleep(110);
+			Thread.sleep(150);
 		}
 		else {
-			Thread.sleep(90);
+			Thread.sleep(100);
 		}
 	}
 }

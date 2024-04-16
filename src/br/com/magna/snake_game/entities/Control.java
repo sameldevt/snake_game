@@ -28,9 +28,13 @@ public class Control extends JFrame implements KeyListener, Runnable {
 	}
 
 	private void loadFrameConfiguration() {
-		setSize(100, 100);
 		addKeyListener(this);
 		setFocusable(true);
+		setVisible(false);
+		setAlwaysOnTop(true);
+		setUndecorated(true);
+		setOpacity(0.01f);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setVisible(true);
 	}
 
