@@ -2,64 +2,91 @@ package br.com.magna.snake_game.entities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 import java.util.Scanner;
 
-import br.com.magna.snake_game.enums.Direction;
+import br.com.magna.snake_game.services.TerminalHandler;
 
-public class Table implements Runnable{
+public class Table {
 
-	public static char[][] table =  new char[35][160];
-	public static Snake snake = new Snake();
-	
+	private char[][] matrix = new char[35][160];
+	private Snake snake = new Snake();
+	private char pointChar = '*';
+	private char wallChar = '#';
+	private char snakeChar = snake.getSnakeChar();
+	private int totalMapPoints = 0;
+
 	public Table() {
-		table = fillTable();
-		snake.setSnakeDirection(Direction.RIGHT);
+		loadMatrix(TerminalHandler.MAIN_MENU);
 	}
 	
-	@Override
-	public void run() {
-		while(true) {
-			printTable();
-			snake.move();
-			clear();
-		}
+	public char getWallChar() {
+		return wallChar;
 	}
 	
-	public static Snake getSnake() {
+	public char getSnakeChar() {
+		return snakeChar;
+	}
+	
+	public char getPointChar() {
+		return pointChar;
+	}
+	
+	public char[][] getMatrix() {
+		return matrix;
+	}
+	
+	public Snake getSnake() {
 		return snake;
 	}
 	
-	private static void clear() {
-		for (int i = 0; i < 50; i++)
-			System.out.println();
+	public int getTotalMapPoints() {
+		return totalMapPoints;
 	}
-
-	private void printTable() {
-		for (char[] row : table) {
-			for (int column = 0; column < row.length; column++) {
-				System.out.print(row[column]);
+	
+	public void printMatrix() {
+		for (int row = 0; row < matrix.length; row++) {
+			for (int column = 0; column < matrix[row].length; column++) {
+				System.out.print(matrix[row][column]);
 			}
 			System.out.println();
 		}
 	}
 	
-	private char[][] fillTable(){
+	public void loadMatrix(String path) {
 		char[][] table = new char[35][160];
 		int i = 0;
-		try(Scanner s = new Scanner(new File("util/name.txt"))){
-			while(s.hasNextLine()) {
+		try (Scanner s = new Scanner(new File(path))) {
+			while (s.hasNextLine()) {
 				String line = s.nextLine();
 
-				for(int j = 0; j < line.length(); j++) {
+				for (int j = 0; j < line.length(); j++) {
 					char c = line.charAt(j);
 					table[i][j] = c;
 				}
 
 				i++;
 			}
-		}catch(FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
-		return table;
+
+		matrix = table;
+	}
+	
+	public void loadRandomPoints(char[][] matrix) {
+		Random r = new Random();
+		int randomPoints = 15;
+		while(randomPoints > 0) {
+			int randomRow = r.nextInt(0, matrix.length);
+			int randomColumn = r.nextInt(0, matrix[0].length);
+			
+			if(matrix[randomRow][randomColumn] == ' ') {
+				matrix[randomRow][randomColumn] = pointChar;
+				totalMapPoints++;
+			}
+			
+			randomPoints--;
+		}
 	}
 }
