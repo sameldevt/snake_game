@@ -77,7 +77,6 @@ public class Table {
 	public void loadRandomPoints(char[][] matrix) {
 		Random r = new Random();
 		int randomPoints = 15;
-		
 		while(randomPoints > 0) {
 			int randomRow = r.nextInt(0, matrix.length);
 			int randomColumn = r.nextInt(0, matrix[0].length);

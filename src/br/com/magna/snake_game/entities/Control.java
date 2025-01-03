@@ -1,5 +1,6 @@
 package br.com.magna.snake_game.entities;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.reflect.Method;
@@ -33,8 +34,8 @@ public class Control extends JFrame implements KeyListener, Runnable {
 		setVisible(false);
 		setAlwaysOnTop(true);
 		setUndecorated(true);
-		setOpacity(0.01f);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
+	    setBackground(new Color(0, 0, 0, 0));
 		setVisible(true);
 	}
 
